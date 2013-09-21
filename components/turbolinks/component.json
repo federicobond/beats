@@ -1,0 +1,12 @@
+{
+  "name": "turbolinks",
+  "description": "Turbolinks makes following links in your web application faster",
+  "version": "2.0.0",
+  "keywords": [
+    "turbolinks"
+  ],
+  "dependencies": {},
+  "scripts": [
+    "index.js"
+  ]
+}

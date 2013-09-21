@@ -1,0 +1,13 @@
+{
+  "name": "event",
+  "repo": "itsjoesullivan/event",
+  "description": "Minimal events: 'on', 'trigger'",
+  "keywords": [
+    "event",
+    "trigger"
+  ],
+  "version": "1.0.0",
+  "scripts": [
+    "index.js"
+  ]
+}

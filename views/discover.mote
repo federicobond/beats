@@ -1,0 +1,27 @@
+<div id="content-discover" class="content row">
+  <div class="col-lg-3">
+    <ul class="nav nav-pills nav-stacked">
+      <li class="active"><a href="#"><span class="badge pull-right">{{ songs.count }}</span>Random Songs</a></li>
+      <li><a href="#">Random Albums</a></li>
+    </ul>
+  </div>
+  <div class="col-lg-9">
+    <div class="row">
+      % songs.each do |song|
+      <div class="col-sm-6 col-md-3">
+        <div class="album thumbnail">
+          <img src="{{ song.image || "/img/default.png" }}" alt="">
+          <div class="overlay">
+            <a href="#" data-command="play" data-song="{{ song.file }}"><span class="glyphicon glyphicon-play"></span></a>
+            <a href="#" data-command="add" data-song="{{ song.file }}"><span class="glyphicon glyphicon-plus"></span></a>
+          </div>
+          <div class="caption">
+            <h4>{{ song.title }}</h4>
+            <p>{{ song.artist }} | {{ song.album }}</p>
+          </div>
+        </div>
+      </div>
+      % end
+    </div>
+  </div>
+</div>

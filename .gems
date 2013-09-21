@@ -1,0 +1,6 @@
+cuba -v 3.1.0
+cuba-contrib -v 3.1.0
+thin -v 1.5.1
+faye -v 0.8.9
+mote -v 1.1.2
+ruby-mpd -v 0.2.4

@@ -1,0 +1,26 @@
+{
+  "name": "beats",
+  "dependencies": {
+    "jb55/domready": "*",
+    "ded/qwery": "*",
+    "fat/bean": "*",
+    "itsjoesullivan/event": "*",
+    "component/inherit": "*",
+    "component/classes": "*",
+    "component/truncate": "*",
+    "remy/polyfills": "*",
+    "javascript/augment": "*",
+    "segmentio/extend": "*",
+    "jofan/draggy": "*"
+  },
+  "paths": [
+    "components"
+  ],
+  "local": [
+    "turbolinks",
+    "spin.js",
+    "humane.js",
+    "settings-store",
+    "throttle"
+  ]
+}

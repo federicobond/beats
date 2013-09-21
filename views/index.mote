@@ -1,0 +1,26 @@
+<div id="content-index" class="content jumbotron">
+  % if current_song
+  <img src="{{ current_song.image }}" alt="" class="img-thumbnail" id="current-song-image">
+  <h1 id="current-song-title">{{ current_song.title }}</h1>
+  <p id="current-song-artist">{{ current_song.artist}} | {{ current_song.album }}</p>
+  <div id="current-song-progress" class="progress">
+    <div class="progress-bar" role="progressbar"></div>
+  </div>
+  <p>
+    <a id="current-song-state" class="btn btn-lg btn-primary" href="#" data-command="pause">&#9654; Currently playing</a>
+  </p>
+  <script>
+    window.currentSong = {{ JSON.dump(current_song.to_json) }}
+  </script>
+  % else
+  <img src="/img/default.png" alt="" class="img-thumbnail" id="current-song-image">
+  <h1 id="current-song-title">Not playing.</h1>
+  <p id="current-song-artist">Please select a song and hit play.</p>
+  <div id="current-song-progress" class="progress">
+    <div class="progress-bar" role="progressbar"></div>
+  </div>
+  <p>
+    <a id="current-song-state" class="btn btn-lg btn-default" href="#">Stopped</a>
+  </p>
+  % end
+</div>

@@ -1,0 +1,32 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th width="65px;"></th>
+      <th>Name</th>
+      <th width="220px">Artist</th>
+      <th width="220px">Album</th>
+    </tr>
+  </thead>
+  <tbody>
+  % if songs.any?
+    % songs.each do |song|
+    <tr>
+      <td>
+        <div class="btn-group">
+          <button class="btn btn-default btn-xs" data-command="play" data-song="{{ song.file }}"><span class="glyphicon glyphicon-play"></span></button>
+          <button class="btn btn-default btn-xs" data-command="add" data-song="{{ song.file }}"><span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+      </td>
+      <td>{{ song.title }}</td>
+      <td>{{ song.artist }}</td>
+      <td>{{ song.album }}</td>
+    </tr>
+    % end
+  </tbody>
+  % else
+    <tr>
+      <td>&nbsp;</td>
+      <td colspan="3">No songs in this playlist.</td>
+    </tr>
+  % end
+</table>

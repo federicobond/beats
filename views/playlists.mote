@@ -1,0 +1,15 @@
+<div id="content-playlists" class="content row">
+  <div class="col-lg-3">
+    <div class="list-group">
+      <a class="list-group-item{{ playlist.nil? ? " active" : "" }}" href="/playlists"><span class="badge pull-right" data-bind="playlistlength">{{ current_count }}</span><strong>Current</strong></a>
+      % playlists.each do |p|
+      <a class="list-group-item{{ playlist == p ? " active" : "" }}" href="/playlists?name={{ p.name }}"><span class="badge pull-right">{{ p.count }}</span>{{ p.name }}</a>
+      % end
+    </div>
+  </div>
+  <div class="col-lg-9">
+    % if songs
+    {{ this.partial("_songs", {songs: songs}) }}
+    % end
+  </div>
+</div>

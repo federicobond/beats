@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+cat .gems | sed "s/ -v /:/" | xargs gem install 
