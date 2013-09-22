@@ -86,7 +86,7 @@ class Player
         when "volume"
           mpd.volume = command["value"].to_i
         when "random"
-          mpd.repeat = !!command["value"]
+          mpd.random = !!command["value"]
         when "repeat"
           mpd.repeat = !!command["value"]
         end

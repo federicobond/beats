@@ -10,7 +10,6 @@ Priority
  * Drag and drop songs from the queue (#move, #swap)
  * Add all songs from artist or album
  * Use data bindings to keep client-side interface updated (checkout how Angular does it)
- * Persist settings in UI (populating them server side)
  * JS: Use controlers to define responsabilities. Each page with code should be handled by a controller
  * Load songs lazily on scroll for long lists (either infinite scroll o More button)
  * Update database button (in settings?)

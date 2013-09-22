@@ -6,7 +6,6 @@ var augment  = require("augment"),
     extend   = require("extend"),
     humane   = require("humane.js"),
     qwery    = require("qwery"),
-    Settings = require("settings-store"),
     Spinner  = require("spin.js"),
     truncate = require("truncate"),
     Draggy   = require("draggy"),
@@ -22,8 +21,6 @@ var q = qwery,
 
 bean.setSelectorEngine(qwery)
 
-var settings = new Settings()
-
 var NullNotification = Object.augment(function() {
 
   this.constructor = function() {}
@@ -31,6 +28,58 @@ var NullNotification = Object.augment(function() {
   this.cancel = function() {}
 
 })
+
+var SettingsController = Object.augment(function() {
+
+  this.constructor = function() {
+
+    this.initialize()
+    this.registerEvents()
+  }
+
+  this.initialize = function() {
+
+    var volumeInput = q("input[name=volume]", "#settings-form")[0],
+        maxValue = 200
+
+    var draggy = new Draggy('volume-handle', {
+      bindTo: 'volume-slider',
+      restrictY: true,
+      onChange: throttle(function(value) {
+
+        volumeInput.value = parseInt(value / maxValue * 100, 10)
+        bean.fire(volumeInput, 'change')
+
+      }, 500, {leading: false})
+    })
+
+    draggy.moveTo(parseInt(volumeInput.value * maxValue / 100, 10))
+  }
+
+  this.registerEvents = function() {
+
+    bean.on(qid("settings-form"), "change", "input", function(e) {
+      var el = e.target
+
+      if (el instanceof HTMLInputElement) {
+        var command = {}
+
+        command.name  = el.name
+        command.value = (el.type == "checkbox") ? el.checked : el.value
+
+        app.publish({command: command})
+      }
+
+    })
+
+    bean.on(qid("settings-desktop-notifications"), "click", function(e) {
+      if (e.target.checked) {
+        window.webkitNotifications.requestPermission()
+      }
+    })
+  }
+})
+
 
 var Logger = {
   incoming: function(message, callback) {
@@ -125,51 +174,9 @@ var App = Object.augment(function() {
         app = this
 
     if (path == "/settings") {
-
-      var maxValue = 200
-      var draggy = new Draggy('volume-handle', {
-        bindTo: 'volume-slider',
-        restrictY: true,
-        onChange: throttle(function(value) {
-          app.publish({command: {
-            name: "volume",
-            value: (value / maxValue) * 100
-          }})
-        }, 500, {leading: false})
-      })
-
-      draggy.moveTo(100, 0)
-
-      bean.on(qid("settings-form"), "change", "input", function(e) {
-
-        var el = e.target
-
-        if (el instanceof HTMLInputElement && el.type == "checkbox") {
-
-          var command = {
-            name: el.name,
-            value: el.checked
-          }
-
-          app.publish({command: command})
-
-        }
-
-      })
-
-      bean.on(qid("settings-desktop-notifications"), "click", function(e) {
-        if (e.target.checked) {
-          window.webkitNotifications.requestPermission()
-        }
-      })
-
-      bean.on(qid("settings-form"), "submit", function() {
-
-        var desktopNotifications = qid("settings-desktop-notifications").checked
-        settings.set("desktopNotifications", desktopNotifications)
-      })
+      new SettingsController()
     }
-  };
+  }
 
   this.createSpinner = function() {
     var opts = {

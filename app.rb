@@ -117,7 +117,11 @@ Cuba.define do
   end
 
   on get, "settings" do
-    render("settings")
+    render("settings", {
+      volume: player.volume,
+      random: player.random?,
+      repeat: player.repeat?,
+    })
   end
 
   on get, "about" do

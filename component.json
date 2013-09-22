@@ -20,7 +20,6 @@
     "turbolinks",
     "spin.js",
     "humane.js",
-    "settings-store",
     "throttle"
   ]
 }

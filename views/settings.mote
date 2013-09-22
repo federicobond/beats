@@ -5,6 +5,7 @@
       <div id="volume-slider" class="volume-slider">
         <div id="volume-handle" draggable="false" class="slider">&nbsp;</div>
       </div>
+      <input type="hidden" name="volume" value="{{ volume }}">
     </div>
   </div>
   <div class="form-group">
@@ -12,7 +13,7 @@
     <div class="col-lg-10">
       <div class="checkbox">
         <label>
-          <input type="checkbox" id="random" name="random"> Enable
+          <input type="checkbox" id="random" name="random" {{ random ? "checked" : "" }}> Enable
         </label>
       </div>
     </div>
@@ -22,7 +23,7 @@
     <div class="col-lg-10">
       <div class="checkbox">
         <label>
-          <input type="checkbox" id="repeat" name="repeat"> Enable
+          <input type="checkbox" id="repeat" name="repeat" {{ repeat ? "checked" : "" }}> Enable
         </label>
       </div>
     </div>
@@ -35,11 +36,6 @@
           <input type="checkbox" id="settings-desktop-notifications"> Enable
         </label>
       </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <div class="col-lg-offset-2 col-lg-10">
-      <button type="submit" class="btn btn-primary">Save changes</button>
     </div>
   </div>
 </form>
