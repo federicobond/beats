@@ -60,37 +60,11 @@ class Player
   def setup_websocket_callbacks
     subscription = client.subscribe("/events") do |message|
       if message.include?("request")
-        if message["request"] == "current_song"
-          song = mpd.current_song
-          song = Song.new(song).to_json unless song.nil?
-          client.publish("/events", {song: song})
-
-        elsif message["request"] == "current_state"
-          state = mpd.status[:state]
-          client.publish("/events", {state: state})
-        end
+        request = message.delete("request")
+        request_handler(request, message)
       elsif message.include?("command")
-        command = message["command"]
-        case command["name"]
-        when "play"
-          if command.include?("song")
-            song = command["song"]
-            mpd.clear
-            mpd.add(song)
-          end
-          mpd.play
-        when "add"
-          song = command["song"]
-          mpd.add(song)
-        when "pause"
-          mpd.pause = true
-        when "volume"
-          mpd.volume = command["value"].to_i
-        when "random"
-          mpd.random = !!command["value"]
-        when "repeat"
-          mpd.repeat = !!command["value"]
-        end
+        command = message.delete("command")
+        command_handler(command, message)
       end
     end
 
@@ -106,6 +80,38 @@ class Player
     end
     client.bind 'transport:up' do
       puts "[CONNECTION UP]"
+    end
+  end
+
+  def request_handler(request, args={})
+    case request
+    when "current_song"
+      client.publish("/events", {song: current_song.to_json})
+    when "current_state"
+      state = mpd.status[:state]
+      client.publish("/events", {state: state})
+    end
+  end
+
+  def command_handler(command, args={})
+    case command
+    when "play"
+      if command.include?("song")
+        clear
+        add(command["song"])
+      end
+      play
+    when "add"
+      song = command["song"]
+      add(song)
+    when "pause"
+      self.pause = true
+    when "volume"
+      self.volume = command["value"].to_i
+    when "random"
+      self.random = !!command["value"]
+    when "repeat"
+      self.repeat = !!command["value"]
     end
   end
 
