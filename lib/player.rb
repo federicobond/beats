@@ -30,6 +30,10 @@ class Player
     @client ||= Faye::Client.new('http://localhost:9292/faye')
   end
 
+  def publish(data)
+    client.publish("/events", data)
+  end
+
   def setup_mpd_callbacks
     events = [:volume, :repeat, :random, :single, :consume, :playlistlength,
               :state, :song, :time, :xfade, :mixrampdb, :mixrampdelay,
@@ -39,19 +43,15 @@ class Player
       case event
       when :song
         @mpd.on event do |song|
-          client.publish("/events", {
-            :song => Song.new(song).to_json
-          })
+          publish(:song => Song.new(song).to_h)
         end
       when :songid
         @mpd.on event do |songid|
-          client.publish("/events", {
-            :song => Song.new(@mpd.song_with_id(songid)).to_json
-          })
+          publish(:song => Song.new(song_with_id(songid)).to_h)
         end
       else
         @mpd.on event do |value|
-          client.publish("/events", {event => value})
+          publish(event => value)
         end
       end
     end
@@ -61,10 +61,11 @@ class Player
     subscription = client.subscribe("/events") do |message|
       if message.include?("request")
         request = message.delete("request")
-        request_handler(request, message)
+        request_handler(request)
       elsif message.include?("command")
-        command = message.delete("command")
-        command_handler(command, message)
+        args = message["command"]
+        command = args.delete("name")
+        command_handler(command, args)
       end
     end
 
@@ -86,32 +87,33 @@ class Player
   def request_handler(request, args={})
     case request
     when "current_song"
-      client.publish("/events", {song: current_song.to_json})
+      song = nil
+      song = current_song.to_h unless current_song.nil?
+      publish(song: song)
     when "current_state"
-      state = mpd.status[:state]
-      client.publish("/events", {state: state})
+      publish(state: state)
     end
   end
 
   def command_handler(command, args={})
     case command
     when "play"
-      if command.include?("song")
+      if args.include?("song")
         clear
-        add(command["song"])
+        add(args["song"])
       end
       play
     when "add"
-      song = command["song"]
+      song = args["song"]
       add(song)
     when "pause"
       self.pause = true
     when "volume"
-      self.volume = command["value"].to_i
+      self.volume = args["value"].to_i
     when "random"
-      self.random = !!command["value"]
+      self.random = !!args["value"]
     when "repeat"
-      self.repeat = !!command["value"]
+      self.repeat = !!args["value"]
     end
   end
 
@@ -140,6 +142,10 @@ class Player
 
   def method_missing(method, *args, &block)
     mpd.send(method, *args, &block)
+  end
+
+  def state
+    status[:state]
   end
 
 private

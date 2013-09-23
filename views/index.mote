@@ -10,7 +10,7 @@
     <a id="current-song-state" class="btn btn-lg btn-primary" href="#" data-command="pause">&#9654; Currently playing</a>
   </p>
   <script>
-    window.currentSong = {{ JSON.dump(current_song.to_json) }}
+    window.currentSong = {{ JSON.dump(current_song.to_h) }}
   </script>
   % else
   <img src="/img/default.png" alt="" class="img-thumbnail" id="current-song-image">

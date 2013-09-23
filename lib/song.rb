@@ -8,7 +8,7 @@ class Song
     @song = song
   end
 
-  def to_json
+  def to_h
     {
       title: title,
       artist: artist,

@@ -8,10 +8,10 @@ class Playlist
     @playlist = playlist
   end
 
-  def to_json
+  def to_h
     {
       name: name,
-      songs: songs.map(&:to_json)
+      songs: songs.map(&:to_h)
     }
   end
 
