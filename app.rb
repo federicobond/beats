@@ -62,17 +62,6 @@ Cuba.define do
     render("discover", {songs: player.random})
   end
 
-  on get, "people" do
-    users = Array.new(5) do
-      OpenStruct.new(
-        name: "Federico Bond",
-        position: "Developer",
-        gravatar: "http://gravatar.com/avatar/bbdec1b1d45fbb9d13f02dc5e678bf0e?size=120",
-      )
-    end
-    render("people", {users: users})
-  end
-
   on get, "playlists" do
     playlists = player.playlists
     ctx = {
