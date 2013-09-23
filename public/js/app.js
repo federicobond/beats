@@ -130,12 +130,12 @@ var App = Object.augment(function() {
 
     bean.on(document, "page:change", function() {
       console.log("%c Page changed to " + window.location.pathname, "font-weight: bold;")
+      app.updateNav()
       app.registerPageEvents()
     })
 
     bean.on(document, "page:load", function() {
       app.stopSpinner()
-      app.updateNav()
     })
   }
 
