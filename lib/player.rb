@@ -106,6 +106,8 @@ class Player
     when "add"
       song = args["song"]
       add(song)
+    when "seek"
+      seek(args["time"])
     when "pause"
       self.pause = true
     when "volume"

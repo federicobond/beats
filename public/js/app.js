@@ -29,6 +29,39 @@ var NullNotification = Object.augment(function() {
 
 })
 
+var HomeController = Object.augment(function() {
+
+  this.constructor = function() {
+
+    this.initialize()
+    this.registerEvents()
+  }
+
+  this.initialize = function() {
+
+    app.currentSong = window.currentSong
+    app.requestCurrentSong()
+    app.requestCurrentState()
+  }
+
+  this.registerEvents = function() {
+
+    bean.on(qid("current-song-progress"), "click", function(e) {
+      if (app.currentSong) {
+        var seekPercent = (e.clientX - this.offsetLeft) / this.clientWidth,
+            time = parseInt(seekPercent * app.currentSong.time, 10)
+
+        app.publish({command: {
+          name: "seek",
+          time: time
+        }})
+
+        app.updateCurrentSongTime(time)
+      }
+    })
+  }
+})
+
 var SettingsController = Object.augment(function() {
 
   this.constructor = function() {
@@ -106,12 +139,6 @@ var App = Object.augment(function() {
   this.registerEvents = function() {
     var app = this
 
-    app.on("init", function() {
-      app.currentSong = window.currentSong
-      app.requestCurrentSong()
-      app.requestCurrentState()
-    })
-
     app.on("song:change", function(song) {
       app.updateCurrentSong(song)
     })
@@ -175,6 +202,8 @@ var App = Object.augment(function() {
 
     if (path == "/settings") {
       new SettingsController()
+    } else if (path == "/") {
+      new HomeController()
     }
   }
 
@@ -242,15 +271,14 @@ var App = Object.augment(function() {
 
   this.updateCurrentSongTime = function(time) {
     if (!this.currentSong) {
-      this.requestCurrentSong()
+      return
     }
 
-    bar = q(".progress-bar", "#current-song-progress")[0]
+    var progress = q(".progress-bar", "#current-song-progress")[0]
 
-    if (bar) {
-
+    if (progress) {
       var percentage = (time / this.currentSong.time) * 100
-      bar.style.width = percentage + "%"
+      progress.style.width = percentage + "%"
     }
   }
 

@@ -33,6 +33,10 @@ body {
   margin-right: 50px;
 }
 
+#current-song-progress {
+  cursor: pointer;
+}
+
 .album {
   margin-bottom: 20px;
 }
