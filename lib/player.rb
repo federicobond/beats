@@ -3,9 +3,10 @@ class Player
   class Error < StandardError; end
   class ConnectionError < Error; end
 
-  mc = class << self; self; end
-  mc.send(:attr_accessor, :host)
-  mc.send(:attr_accessor, :port)
+  class << self
+    attr_accessor :host
+    attr_accessor :port
+  end
 
   def self.setup
     yield self
