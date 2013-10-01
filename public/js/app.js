@@ -347,7 +347,7 @@ var App = Object.augment(function() {
 
   this.registerSocketListener = function() {
 
-    this.faye = new Faye.Client('http://localhost:9292/faye')
+    this.faye = new Faye.Client('/faye')
     // activate logger to debug websocket
     this.faye.addExtension(Logger);
 
